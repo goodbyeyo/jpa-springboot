@@ -3,7 +3,7 @@ package jpa.shop;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Getter
 @NoArgsConstructor
 //@Setter
-public class Member {
+public class Members {
 
     @Id
     @GeneratedValue
@@ -20,7 +20,7 @@ public class Member {
     private String username;
 
     @Builder
-    public Member(Long id, String username) {
+    public Members(Long id, String username) {
         this.id = id;
         this.username = username;
     }
