@@ -29,6 +29,10 @@ public class Member {
     @OneToMany(mappedBy = "member") // 읽기 전용의 표현, 값을 넣어도 forigenKey가 변경되지 않는다
     private List<Order> orders = new ArrayList<>();
 
+    public Member(String name) {
+        this.name = name;
+    }
+
     /*@Builder
     public Member(Long id, String name, Address address, List<Order> orders) {
         this.id = id;

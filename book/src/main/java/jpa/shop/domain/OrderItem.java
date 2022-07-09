@@ -13,7 +13,6 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class OrderItem {
 
     @Id
@@ -32,14 +31,29 @@ public class OrderItem {
     private int orderPrice;
     private int count;
 
-    /*
-    @Builder
-    public OrderItem(Long id, Item item, Order order, int orderPrice, int count) {
-        this.id = id;
-        this.item = item;
-        this.order = order;
-        this.orderPrice = orderPrice;
-        this.count = count;
+    // JPA는 pretected 까지 기본생성자를 만들수 있게 허용해준다
+    protected OrderItem() {
     }
-    */
+
+    //생성 메서드
+    public static OrderItem createOrder(Item item, int orderPrice, int count) {
+        OrderItem orderItem = new OrderItem();
+        orderItem.setItem(item);
+        orderItem.setOrderPrice(orderPrice);
+        orderItem.setCount(count);
+
+        item.removeStock(count);
+        return orderItem;
+    }
+
+    //비지니스 로직
+    public void cancel() {  // 재수수량을 원복
+        getItem().addStock(count);
+    }
+
+    // 조회 로직
+    // 주문 상품 전체 가격 조회
+    public int getTotalPrice() {
+        return getOrderPrice() * getCount();
+    }
 }
