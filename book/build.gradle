@@ -20,6 +20,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.projectlombok:lombok:1.18.24'
     implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-hibernate5'
+
     runtimeOnly 'com.h2database:h2'
     runtimeOnly 'org.postgresql:postgresql'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

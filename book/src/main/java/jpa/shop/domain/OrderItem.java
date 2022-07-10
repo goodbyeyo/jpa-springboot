@@ -1,5 +1,6 @@
 package jpa.shop.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jpa.shop.domain.item.Item;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class OrderItem {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "order_id")
+    @JsonIgnore // 양뱡향 연관관계 해결(제거)
     private Order order;
 
     private int orderPrice;

@@ -68,4 +68,19 @@ public class MemberService {
             throw new IllegalStateException("이미 존재하는 회원입니다");
         }
     }
+
+    //
+    @Transactional
+    public void update(Long id, String name) {
+        // 영속성 컨텍스트에서 Member 객체에 할당
+        // setName()메서드로 변경하면 트랜잭션이 종료될때 Spring AOP가 동작(Commit 실행)
+        // JPA 변경감지에 의해서 -> flush -> commit
+        Member member = memberRepository.findOne(id);
+        member.setName(name);
+
+    }
+
+    public Member findOne(Long id) {
+        return memberRepository.findOne(id);
+    }
 }

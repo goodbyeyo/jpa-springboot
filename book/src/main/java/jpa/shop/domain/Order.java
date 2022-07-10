@@ -1,9 +1,8 @@
 package jpa.shop.domain;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,18 +17,19 @@ import static javax.persistence.FetchType.*;
 @Setter
 //@NoArgsConstructor
 public class Order {
-
     @Id
     @GeneratedValue
     @Column(name = "order_id")
     private Long id;
 
+    // 지연로딩 -> Proxy객체 생성 -> new ByteBuddyInterceptor() // 실제데아터 조회시 프록시 조기화
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
-    private Member member;
+    private Member member;  // =  new ByteBuddyInterceptor()
 
     // cascade = CascadeType.ALL ::: persist를 전파한다....
     // 즉 orderItems에 값만 넣고 Order를 persist하면 모든 Collection을 다 저장한다
+    // @BatchSize(size = 1000) // application.yml : default_batch_fetch_size 의 세부설정
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 

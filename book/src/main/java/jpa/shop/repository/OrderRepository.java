@@ -2,7 +2,7 @@ package jpa.shop.repository;
 
 import jpa.shop.domain.Member;
 import jpa.shop.domain.Order;
-import jpa.shop.domain.OrderStatus;
+import jpa.shop.repository.order.simplequery.OrderSimpleQueryDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
@@ -82,6 +82,38 @@ public class OrderRepository {
         cq.where(cb.and(criteria.toArray(new Predicate[criteria.size()])));
         TypedQuery<Order> query = em.createQuery(cq).setMaxResults(1000); //최대 1000건
         return query.getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery("select o from Order o" +
+                " join fetch o.member m" +
+                " join fetch o.delivery d", Order.class)
+                .getResultList();
+    }
+
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery("select o from Order o" +
+                        " join fetch o.member m" +
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
+    /* JPA의 distinct는 Order Entity의  중복값이 있으면 중복을 제거해준다 */
+    /* 일대다(xtoMany) 에서는 fetch 조인은 페이징이 안되므로 쓰면 안된다 */
+    /*컬렉션 페치 조인은 1개만 사용할 수 있다. */
+    /*컬렉션 둘 이상에 페치 조인을 사용하면 안된다. 데이터가 부정합하게 조회될 수 있다. */
+    public List<Order> findAllWithItem() {
+        return em.createQuery(
+                        "select distinct o from Order o" +
+                                " join fetch o.member m" +
+                                " join fetch o.delivery d" +
+                                " join fetch o.orderItems oi" +
+                                " join fetch oi.item i", Order.class)
+                .setFirstResult(1)
+                .setMaxResults(2)
+                .getResultList();
     }
 
 }
