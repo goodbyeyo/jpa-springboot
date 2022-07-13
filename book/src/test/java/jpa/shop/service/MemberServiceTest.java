@@ -1,13 +1,12 @@
 package jpa.shop.service;
 
 import jpa.shop.domain.Member;
-import jpa.shop.repository.MemberRepository;
+import jpa.shop.repository.MemberRepositoryOld;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 public class MemberServiceTest {
 
-    @Autowired MemberService memberService;
+    @Autowired
+    MemberServiceOld memberServiceOld;
 
-    @Autowired MemberRepository memberRepository;
+    @Autowired
+    MemberRepositoryOld memberRepository;
 
     @Autowired
     EntityManager em;
@@ -34,7 +35,7 @@ public class MemberServiceTest {
         Member member = new Member("Wook");
 
         // when
-        Long saveId = memberService.join(member);
+        Long saveId = memberServiceOld.join(member);
 
         // then
         em.flush(); // 영속성 컨텍스트에 있는 내용을 반영. 테스트가 종료되면서 트랜잭션은 롤백
@@ -50,8 +51,8 @@ public class MemberServiceTest {
         Member member2 = new Member("Wook");
 
         //when
-        memberService.join(member);
-        memberService.join(member2);
+        memberServiceOld.join(member);
+        memberServiceOld.join(member2);
 
         //then
         Assertions.fail("예외가 발생해야한다");

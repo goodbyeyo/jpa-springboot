@@ -5,7 +5,7 @@ import jpa.shop.domain.Order;
 import jpa.shop.domain.item.Item;
 import jpa.shop.repository.OrderSearch;
 import jpa.shop.service.ItemService;
-import jpa.shop.service.MemberService;
+import jpa.shop.service.MemberServiceOld;
 import jpa.shop.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -19,12 +19,12 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final MemberService memberService;
+    private final MemberServiceOld memberServiceOld;
     private final ItemService itemService;
 
     @GetMapping(value = "/order")
     public String createForm(Model model) {
-        List<Member> members = memberService.findMembers();
+        List<Member> members = memberServiceOld.findMembers();
         List<Item> items = itemService.findItems();
         model.addAttribute("members", members);
         model.addAttribute("items", items);

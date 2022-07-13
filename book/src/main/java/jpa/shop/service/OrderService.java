@@ -6,7 +6,7 @@ import jpa.shop.domain.Order;
 import jpa.shop.domain.OrderItem;
 import jpa.shop.domain.item.Item;
 import jpa.shop.repository.ItemRepository;
-import jpa.shop.repository.MemberRepository;
+import jpa.shop.repository.MemberRepositoryOld;
 import jpa.shop.repository.OrderRepository;
 import jpa.shop.repository.OrderSearch;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepository;
     private final ItemRepository itemRepository;
 
     // 주문
@@ -58,7 +58,8 @@ public class OrderService {
 
     // 검색
     public List<Order> findOrders(OrderSearch orderSearch) {
-        return orderRepository.findAllByCriteria(orderSearch);
+//        return orderRepository.findAllByCriteria(orderSearch);
+        return orderRepository.findAll(orderSearch);
     }
 
 }

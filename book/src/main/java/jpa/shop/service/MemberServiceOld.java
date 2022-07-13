@@ -1,7 +1,6 @@
 package jpa.shop.service;
 
 import jpa.shop.domain.Member;
-import jpa.shop.repository.MemberRepository;
 import jpa.shop.repository.MemberRepositoryOld;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,11 +14,11 @@ import java.util.List;
 //@AllArgsConstructor // 생성자 만들어준다
 @Transactional(readOnly = true) // 읽기전용 : 조회하는곳에서 성능 최적화
 @RequiredArgsConstructor // final 있는 필드를 가지고 생성자를 만들어준다
-public class MemberService {
+public class MemberServiceOld {
 
 
 //    @Autowired  // field injection
-    private final MemberRepository memberRepository;
+    private final MemberRepositoryOld memberRepository;
 
     // Test Code 작성할때 직접 주입해줄수 있다
     /*
@@ -57,7 +56,7 @@ public class MemberService {
      * 회원 단건 조회
      */
     public Member findMember(Long memberId) {
-        return memberRepository.findById(memberId).get();
+        return memberRepository.findOne(memberId);
     }
 
     private void validateDuplicateMember(Member member) {
@@ -74,12 +73,12 @@ public class MemberService {
         // 영속성 컨텍스트에서 Member 객체에 할당
         // setName()메서드로 변경하면 트랜잭션이 종료될때 Spring AOP가 동작(Commit 실행)
         // JPA 변경감지에 의해서 -> flush -> commit
-        Member member = memberRepository.findById(id).get();
+        Member member = memberRepository.findOne(id);
         member.setName(name);
 
     }
 
     public Member findOne(Long id) {
-        return memberRepository.findById(id).get();
+        return memberRepository.findOne(id);
     }
 }

@@ -1,11 +1,10 @@
 package jpa.shop.api;
 
 import jpa.shop.domain.Member;
-import jpa.shop.service.MemberService;
+import jpa.shop.service.MemberServiceOld;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class MemberApiController {
 
-    private final MemberService memberService;
+    private final MemberServiceOld memberServiceOld;
 
     /**
      * 조회 V1: 응답 값으로 엔티티를 직접 외부에 노출한다.
@@ -39,12 +38,12 @@ public class MemberApiController {
     // -> 이건 정말 최악, api가 이거 하나인가! 화면에 종속적이지 마라!
     @GetMapping("/api/v1/members")
     public List<Member> memberV1() {
-        return memberService.findMembers();
+        return memberServiceOld.findMembers();
     }
 
     @GetMapping("/api/v2/members")
     public Result memberV2() {
-        List<MemberDto> collect = memberService.findMembers().stream()
+        List<MemberDto> collect = memberServiceOld.findMembers().stream()
                 .map(m -> new MemberDto(m.getName()))
                 .collect(Collectors.toList());
         return new Result(collect.size(), collect);
@@ -72,7 +71,7 @@ public class MemberApiController {
     @PostMapping("/api/v1/members")
     public CreateMemberResponse saveMemberV1(@RequestBody @Valid Member member) {
 
-        Long id = memberService.join(member);
+        Long id = memberServiceOld.join(member);
         return new CreateMemberResponse(id);
     }
 
@@ -80,7 +79,7 @@ public class MemberApiController {
     public CreateMemberResponse saveMemberV2(@RequestBody @Valid CreateMemberRequest request) {
         Member member = new Member();
         member.setName(request.getName());
-        Long id = memberService.join(member);
+        Long id = memberServiceOld.join(member);
         return new CreateMemberResponse(id);
     }
 
@@ -90,9 +89,9 @@ public class MemberApiController {
             @RequestBody @Valid UpdateMemberRequest request) {
 
         // 변경 감지
-        memberService.update(id, request.getName());
+        memberServiceOld.update(id, request.getName());
         // command와 query의 분리
-        Member findMember = memberService.findOne(id);
+        Member findMember = memberServiceOld.findOne(id);
         return new UpdateMemberResponse(findMember.getId(), findMember.getName());
     }
 

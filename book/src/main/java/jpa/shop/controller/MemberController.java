@@ -2,7 +2,7 @@ package jpa.shop.controller;
 
 import jpa.shop.domain.Address;
 import jpa.shop.domain.Member;
-import jpa.shop.service.MemberService;
+import jpa.shop.service.MemberServiceOld;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private final MemberService memberService;
+    private final MemberServiceOld memberServiceOld;
 
     @GetMapping("/members/new")
     public String createFrom(Model model) {
@@ -34,13 +34,13 @@ public class MemberController {
         Member member = new Member();
         member.setName(form.getName());
         member.setAddress(address);
-        memberService.join(member);
+        memberServiceOld.join(member);
         return "redirect:/";
     }
 
     @GetMapping("/members")
     public String list(Model model) {
-        List<Member> members = memberService.findMembers();
+        List<Member> members = memberServiceOld.findMembers();
         model.addAttribute("members", members);
         return "members/memberList";
     }
