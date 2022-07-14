@@ -3,19 +3,18 @@ package study.jpadata.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.*;
 import org.springframework.data.repository.query.Param;
 import study.jpadata.dto.MemberDto;
 import study.jpadata.entity.Member;
 
+import javax.persistence.LockModeType;
+import javax.persistence.QueryHint;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public interface MemberRepository extends JpaRepository<Member, Long> {
+public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
     List<Member> findByUsernameAndAgeGreaterThan(String username, int age);
 
@@ -61,7 +60,7 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     //간단한 쿼리는 공통 메서드 오버라이드하여 @EntityGraph 어노테이션으로 해결
     @Override
-    @EntityGraph(attributePaths = {"team"}) 
+    @EntityGraph(attributePaths = {"team"})
     List<Member> findAll();
 
     @EntityGraph(attributePaths = {"team"}) //JPQL + 엔티티 그래프
@@ -72,4 +71,13 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     // @EntityGraph("Member.all")
     @EntityGraph(attributePaths = {"team"})
     List<Member> findEntityGraphByUsername(String username);
+
+    // 성능 최적화가 필요한 경우에만 설정
+    @QueryHints(value = @QueryHint(name = "org.hibernate.readOnly", value = "true"))
+    Member findReadOnlyByUsername(String username);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    List<Member> findLockByUsername(String username);
+
+
 }

@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.*;
         name = "Member.findByUsername",
         query = "select m from Member m where m.username = :username"
 )
-public class Member {
+public class Member extends BaseEntity { // 등록일, 수정일 : 공통관심사 -> 상속을 통해서 구현
 
     @Id
     @GeneratedValue
