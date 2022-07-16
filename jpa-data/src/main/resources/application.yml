@@ -13,6 +13,12 @@ spring:
         # dialect: org.hibernate.dialect.Oracle10gDialect
         # show_sql: true
         format_sql: true
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        max-page-size: 2000
+#        one-indexed-parameters: true // 페이지 1부터 indexing 하기
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.type: trace
