@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: new1234!
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    #      ddl-auto: none
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+        use_sql_comments: true
+        # use_sql_comments: true -> Querydsl의 실행 쿼리를 확인할 수 있다
+#        default_batch_fetch_size: 100 # collection select size, @BatchSize(size = )로 세부설정 가능하다
+
+logging.level:
+  org.hibernate.SQL: debug
+#  org.hibernate.type : trace
