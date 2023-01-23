@@ -23,7 +23,7 @@ spring:
       hibernate:
         format_sql: true  # sql formatting
         default_batch_fetch_size: 100 # sql bulk fetch size 설정 n+1 문제 해결
-        dialect: org.hibernate.dialect.MySQLDialect # mysql dialect 설정
+        dialect: org.hibernate.dialect.MySQL8Dialect # mysql dialect 설정
   h2.console.enabled: true # h2 콘솔 사용 여부
   sql.init.mode: always    # 초기 데이터 입력 설정
 
@@ -31,8 +31,12 @@ spring:
 
 spring:
   config.activate.on-profile: testdb # testdb 프로파일 활성화
-#  datasource:
-#    url: jdbc:h2:mem:board;mode=mysql
-#    driverClassName: org.h2.Driver
-#  sql.init.mode: always
-#  test.database.replace: none
+  datasource:
+    url: jdbc:h2:mem:board;mode=mysql
+    driverClassName: org.h2.Driver
+  sql.init.mode: always
+  test.database.replace: none
+#  jpa:
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.MySQL8Dialect
