@@ -1,0 +1,38 @@
+debug: false  # ent to ent point log 화인 가능 (다른 로그가 많아져서 비추천)
+
+management.endpoints.web.exposure.include: "*"  # actuator 모든 endpoint 사용 가능
+
+logging:
+  level:
+    com.spring.board: debug # 어떤 패키지 확인 가능
+    org.springframework.web.servlet: debug  # 어떤 요청이 들어오는지 확인 가능
+    org.hibernate.type.descriptor.sql.BasicBinder: trace  # 어떤 쿼리가 실행되는지 확인 가능
+
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/board?serverTimezone=UTC&useSSL=false # mysql 접속 정보
+    username: root
+    password: new1234!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    defer-datasource-initialization: true  # 초기 데이터 입력 설정
+    hibernate.ddl-auto: create  # 자동 테이블 생성
+    open-in-view: false # 성능 향상을 위한 설정
+    show-sql: true  # 쿼리 확인
+    properties:
+      hibernate:
+        format_sql: true  # sql formatting
+        default_batch_fetch_size: 100 # sql bulk fetch size 설정 n+1 문제 해결
+        dialect: org.hibernate.dialect.MySQLDialect # mysql dialect 설정
+  h2.console.enabled: true # h2 콘솔 사용 여부
+  sql.init.mode: always    # 초기 데이터 입력 설정
+
+--- # --- 기준으로 새로운 프로파일 정보 설정
+
+spring:
+  config.activate.on-profile: testdb # testdb 프로파일 활성화
+#  datasource:
+#    url: jdbc:h2:mem:board;mode=mysql
+#    driverClassName: org.h2.Driver
+#  sql.init.mode: always
+#  test.database.replace: none
