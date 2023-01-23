@@ -1,14 +1,74 @@
 package com.spring.board.domain;
 
+import jakarta.persistence.*;
+import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+@Getter
+//@ToString
+@Table(indexes = {
+        @Index(name = "idx_article_content", columnList = "content"),
+        @Index(name = "idx_article_createdAt", columnList = "createdAt"),
+        @Index(name = "idx_article_createdBy", columnList = "createdBy")
+})
+@EntityListeners(AuditingEntityListener.class) // Spring Data JPA Auditing 활성화
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ArticleComment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Article article;    // 1:N 관계
-    private String content;     // 본문
 
+    // N:1 관계 설정 (댓글 N : 게시글 1)
+    // @XToOne 관계는 모두 지연 로딩으로 설정해야 한다. 기본은 즉시 로딩
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Article article;            // 게시글
+
+    @Column(nullable = false, length = 500)
+    private String content;             // 본문
+
+    @CreatedDate @Column(nullable = false)
     private LocalDateTime createdAt;    // 생성일시
-    private String createdBy;   // 생성자
+
+    @CreatedBy @Column(nullable = false, length = 100)
+    private String createdBy;           // 생성자
+
+    @CreatedDate @Column(nullable = false)
     private LocalDateTime modifiedAt;   // 수정일시
-    private String modifiedBy;  // 수정
+
+    @CreatedBy @Column(nullable = false, length = 100)
+    private String modifiedBy;          // 수정
+
+    @Builder
+    private ArticleComment(Article article, String content) {
+        this.article = article;
+        this.content = content;
+    }
+
+    public static ArticleComment of(Article article, String content) {
+        return ArticleComment.builder()
+                .article(article)
+                .content(content)
+                .build();
+    }
+
+    // db entity 동등성 검사 (id 값이 같으면 동일한 entity) : lombok annotation 사용보다 퍼포먼스 증가
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ArticleComment that = (ArticleComment) o;
+        // 영속화 되지 않은 entity 동등성 검사 탈락
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
