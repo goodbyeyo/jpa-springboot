@@ -21,10 +21,10 @@ import java.util.Set;
         @Index(name = "idx_article_createdAt", columnList = "createdAt"),
         @Index(name = "idx_article_createdBy", columnList = "createdBy")
 })
-@EntityListeners(AuditingEntityListener.class) // Spring Data JPA Auditing 활성화
+//@EntityListeners(AuditingEntityListener.class) // Spring Data JPA Auditing 활성화 (AuditingFields 에서 상속받아서 사용)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // Entity : 기본생성자 필요, PROTECTED <- 생성자 접근 불가
-public class Article {
+public class Article extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
@@ -48,21 +48,21 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
-    @CreatedDate
-    @Column(nullable = false)
-    private LocalDateTime createdAt;    // 생성일시
-
-    @CreatedBy
-    @Column(nullable = false, length = 100)
-    private String createdBy;            // 생성자
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;   // 수정일시
-
-    @LastModifiedBy
-    @Column(nullable = false, length = 100)
-    private String modifiedBy;           // 수정
+//    @CreatedDate
+//    @Column(nullable = false)
+//    private LocalDateTime createdAt;    // 생성일시
+//
+//    @CreatedBy
+//    @Column(nullable = false, length = 100)
+//    private String createdBy;            // 생성자
+//
+//    @LastModifiedDate
+//    @Column(nullable = false)
+//    private LocalDateTime modifiedAt;   // 수정일시
+//
+//    @LastModifiedBy
+//    @Column(nullable = false, length = 100)
+//    private String modifiedBy;           // 수정
 
     @Builder
     private Article(String title, String content, String hashtag) {
