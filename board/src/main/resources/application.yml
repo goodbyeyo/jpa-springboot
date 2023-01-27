@@ -22,7 +22,7 @@ spring:
 #      jdbc-url: jdbc:h2:mem://localhost/~/testdb;MODE=MySQL;
   jpa:
     defer-datasource-initialization: true  # 초기 데이터 입력 설정
-    hibernate.ddl-auto: create  # 자동 테이블 생성
+    hibernate.ddl-auto: update  # 자동 테이블 생성
     open-in-view: false # 성능 향상을 위한 설정
     show-sql: true  # 쿼리 확인
     properties:
@@ -33,6 +33,9 @@ spring:
 #        dialect.storage_engine: innodb
   h2.console.enabled: false # h2 콘솔 사용 여부
   sql.init.mode: always    # 초기 데이터 입력 설정
+  data.rest:
+    base-path: /api  # rest api base path 설정
+    detection-strategy: annotated   # @RepositoryRestResource 어노테이션을 사용한 repository 만 rest api 로 사용
 
 --- # --- 기준으로 새로운 프로파일 정보 설정
 
