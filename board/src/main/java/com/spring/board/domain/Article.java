@@ -2,13 +2,7 @@ package com.spring.board.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -47,22 +41,6 @@ public class Article extends AuditingFields {
     @OrderBy("id ASC")  // 댓글을 id 순으로 정렬
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
-
-//    @CreatedDate
-//    @Column(nullable = false)
-//    private LocalDateTime createdAt;    // 생성일시
-//
-//    @CreatedBy
-//    @Column(nullable = false, length = 100)
-//    private String createdBy;            // 생성자
-//
-//    @LastModifiedDate
-//    @Column(nullable = false)
-//    private LocalDateTime modifiedAt;   // 수정일시
-//
-//    @LastModifiedBy
-//    @Column(nullable = false, length = 100)
-//    private String modifiedBy;           // 수정
 
     @Builder
     private Article(String title, String content, String hashtag) {
