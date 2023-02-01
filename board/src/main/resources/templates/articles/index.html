@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+</head>
+
+<body>
+    <header id="header"></header>
+
+    <main>
+        <form>
+            <label for="search-type" hidden>유형</label>
+            <select id="search-type" name="search-type">
+                <option value="title">제목</option>
+                <option value="content">본문</option>
+                <option value="id">id</option>
+                <option value="nickname">닉네임</option>
+                <option value="hashtag">헤시태그</option>
+            </select>
+            <label for="search-value" hidden>검색어</label>
+            <input id="search-value" type="search" placeholder="검색어..." name="search-value">
+        </form>
+    </main>
+
+    <table>
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>해시태그</th>
+                <th>작성자</th>
+                <th>작성일</th>
+            </tr>
+        </thead>
+        <tbody>
+<!--            <tr th:each="article : ${articles}">-->
+<!--                <td th:text="${article.title}"></td>-->
+<!--                <td th:text="${article.hashtag}"></td>-->
+<!--                <td th:text="${article.nickname}"></td>-->
+<!--                <td th:text="${article.createdDate}"></td>-->
+<!--            </tr>-->
+        </tbody>
+    </table>
+
+    <nav>
+        <table>
+            <tr>
+                <td>previous</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>next</td>
+            </tr>
+        </table>
+    <footer id="footer"></footer>
+    </nav>
+</body>
+</html>
