@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @ToString
 @EntityListeners(AuditingEntityListener.class) // Spring Data JPA Auditing 활성화
 @MappedSuperclass   // @Entity 클래스들이 이 클래스를 상속할 경우 필드들도 컬럼으로 인식 -> @Embedded 타입으로도 사용할 수 있다.
-public class AuditingFields {
+public abstract class AuditingFields {
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) // LocalDateTime 타입을 JSON으로 변환할 때 ISO 8601 포맷으로 변환
     @CreatedDate
