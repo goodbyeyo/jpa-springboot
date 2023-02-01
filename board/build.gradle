@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.1.0'
 }
 
@@ -27,25 +27,26 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.data:spring-data-rest-hal-explorer'
-    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+//    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 
     compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    runtimeOnly 'mysql:mysql-connector-java'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //    testImplementation 'org.springframework.security:spring-security-test'
 
     // queryDSL 설정
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
-    // 스프링부트 3.0.미만 implementation 'com.querydsl:querydsl-jpa'
+    // implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    implementation 'com.querydsl:querydsl-jpa' // 스프링부트 3.0.미만
     implementation 'com.querydsl:querydsl-core'
     implementation 'com.querydsl:querydsl-collections'
     // queryDSL JPAAnnotationProcessor 사용 지정
-    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
-    // 스프링 부트 3.0 미만 annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa"
+    annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jpa" // 스프링 부트 3.0 미만
+    // annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     // java.lang.NoClassDefFoundError (javax.annotation.Generated) 대응 코드
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     // java.lang.NoClassDefFoundError (javax.annotation.Entity) 대응 코드
