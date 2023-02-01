@@ -1,8 +1,8 @@
 package com.spring.board.domain;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
@@ -14,7 +14,7 @@ import java.util.Objects;
 })
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ArticleComment extends AuditingFields{
+public class ArticleComment extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

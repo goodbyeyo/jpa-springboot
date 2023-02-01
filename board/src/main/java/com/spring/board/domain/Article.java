@@ -1,8 +1,8 @@
 package com.spring.board.domain;
 
-import jakarta.persistence.*;
 import lombok.*;
 
+import javax.persistence.*;
 import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
