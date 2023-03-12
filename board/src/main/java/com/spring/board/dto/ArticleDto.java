@@ -1,6 +1,5 @@
 package com.spring.board.dto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 public record ArticleDto(
@@ -8,8 +7,14 @@ public record ArticleDto(
         String content,
         String hashtag,
         LocalDateTime createdAt,
-        String createdBy,
-        LocalDateTime modifiedAt,
-        String modifiedBy
-) implements Serializable { }
+        String createdBy
+) {
+    public static ArticleDto of(String title, String content, String hashtag, LocalDateTime createdAt, String createdBy) {
+        return new ArticleDto(title, content, hashtag, createdAt, createdBy);
+    }
+
+//    public Article toEntity(ArticleDto dto) {
+//        return null;
+//    }
+}
 
