@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Getter
-//@ToString
+@ToString(callSuper = true)
 @Table(indexes = {
         @Index(name = "idx_article_content", columnList = "content"),
         @Index(name = "idx_article_createdAt", columnList = "createdAt"),
@@ -24,17 +24,22 @@ public class ArticleComment extends AuditingFields {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Article article;            // 게시글
 
+    @ManyToOne(optional = false)
+    private UserAccount userAccount;    // 유저정보(ID, 닉네임, 이메일 등)
+
     @Column(nullable = false, length = 500)
     private String content;             // 본문
 
     @Builder
-    private ArticleComment(Article article, String content) {
+    private ArticleComment(UserAccount userAccount, Article article, String content) {
+        this.userAccount = userAccount;
         this.article = article;
         this.content = content;
     }
 
-    public static ArticleComment of(Article article, String content) {
+    public static ArticleComment of(Article article, UserAccount userAccount, String content) {
         return ArticleComment.builder()
+                .userAccount(userAccount)
                 .article(article)
                 .content(content)
                 .build();

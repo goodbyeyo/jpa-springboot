@@ -2,6 +2,7 @@ package com.spring.board.repository;
 
 import com.spring.board.config.JpaConfig;
 import com.spring.board.domain.Article;
+import com.spring.board.domain.UserAccount;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,24 +27,31 @@ class ArticleRepositoryTest {
 
     private final ArticleRepository articleRepository;
     private final ArticleCommentRepository articleCommentRepository;
+    private final UserAccountRepository userAccountRepository;
 
     public ArticleRepositoryTest(@Autowired ArticleRepository articleRepository,
-                                 @Autowired ArticleCommentRepository articleCommentRepository) {
+                                 @Autowired ArticleCommentRepository articleCommentRepository,
+                                 @Autowired UserAccountRepository userAccountRepository) {
         this.articleRepository = articleRepository;
         this.articleCommentRepository = articleCommentRepository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @DisplayName("select test")
     @Test
     void selectTest() {
         // given
-        Article article = Article.of("게시판1", "게시판 내용을 등록", "#블로깅");
+        long previousCount = articleRepository.count();
+        UserAccount userAccount = userAccountRepository.save(
+                UserAccount.of("Woo", "pwd", null, null, null));
+        Article article = Article.of(userAccount, "게시판1", "게시판 내용을 등록", "#블로깅");
 
         // when
         articleRepository.save(article);
         List<Article> articleList = articleRepository.findAll();
 
         // then
+        assertThat(articleRepository.count()).isEqualTo(previousCount + 1);
         assertThat(articleList).isNotNull().hasSize(1);
         assertEquals(articleList.size(), 1);
         assertThat(articleList.get(0).getTitle()).isEqualTo("게시판1");
@@ -57,7 +65,9 @@ class ArticleRepositoryTest {
     void insertTest() {
         // given
         long previousCount = articleRepository.count();
-        Article article = Article.of("article1", "content1", "#hashtag1");
+        UserAccount userAccount = userAccountRepository.save(
+                UserAccount.of("Woo", "pwd", null, null, null));
+        Article article = Article.of(userAccount, "article1", "content1", "#hashtag1");
 
         // when
         Article savedArticle = articleRepository.save(article);
@@ -71,7 +81,9 @@ class ArticleRepositoryTest {
     @Test
     void updateTest() {
         // given
-        Article article = Article.of("article2", "content2", "#hashtag2");
+        UserAccount userAccount = userAccountRepository.save(
+                UserAccount.of("Woo", "pwd", null, null, null));
+        Article article = Article.of(userAccount, "article2", "content2", "#hashtag2");
         articleRepository.save(article);
 
         // when
@@ -97,8 +109,10 @@ class ArticleRepositoryTest {
     @Test
     void deleteTest() {
         // given
-        Article article = Article.of("article3", "content3", "#hashtag3");
-        Article article2 = Article.of("article4", "content4", "#hashtag4");
+        UserAccount userAccount = userAccountRepository.save(
+                UserAccount.of("Woo", "pwd", null, null, null));
+        Article article = Article.of(userAccount, "article3", "content3", "#hashtag3");
+        Article article2 = Article.of(userAccount,"article4", "content4", "#hashtag4");
 
         articleRepository.saveAllAndFlush(List.of(article, article2));
 
