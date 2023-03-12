@@ -36,6 +36,8 @@ spring:
   data.rest:
     base-path: /api  # rest api base path 설정
     detection-strategy: annotated   # @RepositoryRestResource 어노테이션을 사용한 repository 만 rest api 로 사용
+  thymeleaf3:
+    decoupled-logic: true  # thymeleaf3 사용 설정
 
 --- # --- 기준으로 새로운 프로파일 정보 설정
 
@@ -43,9 +45,9 @@ spring:
   config.activate.on-profile: testdb # testdb 프로파일 활성화
   datasource:
     url: jdbc:h2:mem:board;mode=mysql
-    driverClassName: org.h2.Driver
+#    driverClassName: org.h2.Driver
   sql.init.mode: always
-  test.database.replace: none
+#  test.database.replace: none
   thymeleaf3.decoupled-logic: true
 
 #  jpa:
