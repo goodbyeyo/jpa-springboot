@@ -9,6 +9,7 @@ import java.util.Set;
 
 @Getter
 // @ToString   // lazy load 필드 때문에 성능 저하 또는 메모리 이슈 일으킬수 있음, 순환참조 문제 발생
+@ToString(callSuper = true)    // 부모 클래스의 필드까지 출력 (AuditingFields)
 @Table(indexes = {
         @Index(name = "idx_article_title", columnList = "title"),
         @Index(name = "idx_article_hashtag", columnList = "hashtag"),
@@ -24,6 +25,9 @@ public class Article extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     private Long id;
 
+    @ManyToOne(optional = false)
+    private UserAccount userAccount;    // 유저정보(ID, 닉네임, 이메일 등)
+
     @Column(nullable = false)
     private String title;                // 제목
 
@@ -38,19 +42,22 @@ public class Article extends AuditingFields {
     // 1) 데이터를 마이그레이션하거나 수정하기 어렵고 2) 원하지 않는 데이터 소실 발생할수 있음
     // 게시글을 삭제하면 연관되어있는 댓글도 삭제되도록 설정됨
     @ToString.Exclude
-    @OrderBy("id ASC")  // 댓글을 id 순으로 정렬
+    // @OrderBy("id ASC")  // 댓글을 id 순으로 정렬
+    @OrderBy("createdAt DESC") // 댓글을 생성일자 역순으로 정렬 (최신순)
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<ArticleComment> articleComments = new LinkedHashSet<>();
 
     @Builder
-    private Article(String title, String content, String hashtag) {
+    private Article(UserAccount userAccount, String title, String content, String hashtag) {
+        this.userAccount = userAccount;
         this.title = title;
         this.content = content;
         this.hashtag = hashtag;
     }
 
-    public static Article of(String title, String content, String hashtag) {
+    public static Article of(UserAccount userAccount, String title, String content, String hashtag) {
         return Article.builder()
+                .userAccount(userAccount)
                 .title(title)
                 .content(content)
                 .hashtag(hashtag)
