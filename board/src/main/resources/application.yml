@@ -23,7 +23,7 @@ spring:
   jpa:
     defer-datasource-initialization: true  # 초기 데이터 입력 설정
     hibernate.ddl-auto: update  # 자동 테이블 생성
-    open-in-view: false # 성능 향상을 위한 설정
+    open-in-view: false # jpa 영속성 컨텍스트와 뷰 템플릿의 생명주기를 동일하게 유지
     show-sql: true  # 쿼리 확인
     properties:
       hibernate:
