@@ -5,6 +5,9 @@ import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.spring.board.domain.Article;
 import com.spring.board.domain.QArticle;
+import com.spring.board.dto.ArticleDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -29,8 +32,7 @@ public interface ArticleRepository extends
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
 //        bindings.bind(root.title).first((path, value) -> path.eq(value));   // StringExpression::eq
 //        bindings.bind(root.title).first(StringExpression::likeIgnoreCase);  // like '${value} %
-
-
-
     }
+
+    Page<ArticleDto> findByTitle(String title, Pageable pageable);
 }
