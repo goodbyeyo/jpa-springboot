@@ -41,7 +41,6 @@ public record ArticleDto(
         );
     }
 
-
     public Article toEntity() { // Article 은 Dto 의 존재를 몰라도 된다 (순환 참조 방지)
         return Article.of(
                 userAccountDto.toEntity(),
@@ -50,6 +49,5 @@ public record ArticleDto(
                 hashtag
         );
     }
-
 }
 
