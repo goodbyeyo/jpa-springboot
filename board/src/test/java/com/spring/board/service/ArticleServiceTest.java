@@ -4,15 +4,12 @@ import com.spring.board.domain.Article;
 import com.spring.board.domain.UserAccount;
 import com.spring.board.domain.constant.SearchType;
 import com.spring.board.dto.ArticleDto;
-import com.spring.board.dto.ArticleUpdateDto;
+import com.spring.board.dto.ArticleWithCommentsDto;
 import com.spring.board.dto.UserAccountDto;
 import com.spring.board.repository.ArticleRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -58,14 +55,14 @@ class ArticleServiceTest {
         SearchType searchType = SearchType.TITLE;
         String searchKeyword = "title";
         Pageable pageable = Pageable.ofSize(20);
-        given(articleRepository.findByTitle(searchKeyword, pageable)).willReturn(Page.empty());
+        given(articleRepository.findByTitleContaining(searchKeyword, pageable)).willReturn(Page.empty());
 
         // when
         Page<ArticleDto> articles = sut.searchArticles(searchType, searchKeyword, pageable);
 
         // then
         assertThat(articles).isEmpty();
-        then(articleRepository).should().findByTitle(searchKeyword, pageable);
+        then(articleRepository).should().findByTitleContaining(searchKeyword, pageable);
     }
 
     @DisplayName("게시글을 조회하면, 게시글 리스트를 반환한다")
@@ -77,7 +74,7 @@ class ArticleServiceTest {
         given(articleRepository.findById(articleId)).willReturn(Optional.ofNullable(article));
 
         // when
-        ArticleWithCommentDto dto = sut.searchArticles(articleId);
+        ArticleDto dto = sut.getArticle(articleId);
 
         // then
         assertThat(dto)
@@ -125,6 +122,8 @@ class ArticleServiceTest {
         // given
         Article article = createArticle();
         ArticleDto dto = createArticleDto("new title", "new content", "#new");
+        // getReferenceById 메서드가 호출되면 article 객체를 반환 (update 메서드가 호출되면 article 객체가 수정된다)
+        // getOne -> deprecated
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
 
         // when
@@ -157,13 +156,17 @@ class ArticleServiceTest {
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
         // given
         Long articleId = 1L;
-        willDoNothing().given(articleRepository).delete(any(Article.class));
+        willDoNothing().given(articleRepository).deleteById(articleId);
+//        given(articleRepository.getReferenceById(articleId)).willReturn(createArticle());
+//        willDoNothing().given(articleRepository).flush();
 
         // when
         sut.deleteArticle(1L);
 
         // then (save 메서드가 호출되었는지 확인)
         then(articleRepository).should().deleteById(articleId);
+//        then(articleRepository).should().getReferenceById(articleId);
+//        then(articleRepository).should().flush();
     }
 
     public UserAccount createUserAccount() {
