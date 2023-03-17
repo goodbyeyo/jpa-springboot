@@ -1,6 +1,7 @@
 package com.spring.board.domain;
 
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.LinkedHashSet;
@@ -19,6 +20,7 @@ import java.util.Set;
 //@EntityListeners(AuditingEntityListener.class) // Spring Data JPA Auditing 활성화 (AuditingFields 에서 상속받아서 사용)
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)  // Entity : 기본생성자 필요, PROTECTED <- 생성자 접근 불가
+// @DynamicUpdate  // 변경된 필드만 업데이트
 public class Article extends AuditingFields {
 
     @Id

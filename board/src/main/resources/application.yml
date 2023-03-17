@@ -44,15 +44,15 @@ spring:
 spring:
   config.activate.on-profile: test # testdb 프로파일 활성화
   datasource:
-    url: jdbc:h2:mem:testdb
-#    url: jdbc:h2:mem:board;mode=mysql
-#    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:board;mode=mysql
+#    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
 #    driverClassName: com.mysql.cj.jdbc.Driver
-#  sql.init.mode: always
-#  test.database.replace: none
+  sql.init.mode: always
+  test.database.replace: none
   thymeleaf3.decoupled-logic: true
 
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL8Dialect
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
