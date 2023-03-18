@@ -1,10 +1,11 @@
 package com.spring.board.repository;
 
 import com.querydsl.core.types.dsl.DateTimeExpression;
-import com.querydsl.core.types.dsl.SimpleExpression;
 import com.querydsl.core.types.dsl.StringExpression;
 import com.spring.board.domain.Article;
 import com.spring.board.domain.QArticle;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
@@ -29,8 +30,14 @@ public interface ArticleRepository extends
         bindings.bind(root.createdBy).first(StringExpression::containsIgnoreCase);
 //        bindings.bind(root.title).first((path, value) -> path.eq(value));   // StringExpression::eq
 //        bindings.bind(root.title).first(StringExpression::likeIgnoreCase);  // like '${value} %
-
-
-
     }
+
+    // Containing: like '%${value}%' 부분검색 가능 : 인덱스 사용 불가
+    Page<Article> findByTitleContaining(String title, Pageable pageable);
+    Page<Article> findByContentContaining(String content, Pageable pageable);
+    Page<Article> findByUserAccount_UserIdContaining(String userId, Pageable pageable);
+    Page<Article> findByUserAccount_NicknameContaining(String nickname, Pageable pageable);
+    Page<Article> findByHashtag(String hashtag, Pageable pageable);
+
+
 }

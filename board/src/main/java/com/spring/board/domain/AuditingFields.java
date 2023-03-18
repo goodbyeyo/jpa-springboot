@@ -23,18 +23,18 @@ public abstract class AuditingFields {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) // LocalDateTime 타입을 JSON으로 변환할 때 ISO 8601 포맷으로 변환
     @CreatedDate
     @Column(nullable = false, updatable = false)    // 생성일시는 수정 불가
-    private LocalDateTime createdAt;    // 생성일시
+    protected LocalDateTime createdAt;    // 생성일시
 
     @CreatedBy
     @Column(nullable = false, length = 100)
-    private String createdBy;            // 생성자
+    protected String createdBy;            // 생성자
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @LastModifiedDate
     @Column(nullable = false)
-    private LocalDateTime modifiedAt;   // 수정일시
+    protected LocalDateTime modifiedAt;   // 수정일시
 
     @LastModifiedBy
     @Column(nullable = false, length = 100)
-    private String modifiedBy;           // 수정
+    protected String modifiedBy;           // 수정
 }

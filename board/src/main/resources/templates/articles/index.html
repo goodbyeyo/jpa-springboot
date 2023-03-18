@@ -59,22 +59,40 @@
         </div>
     </main>
 
-    <table class="table">
+    <table class="table" id="article-table">
         <thead>
             <tr>
-                <th class="col-6">제목</th>
-                <th class="col-2">해시태그</th>
-                <th class="col">작성자</th>
-                <th class="col">작성일</th>
+                <th class="title col-6">제목</th>
+                <th class="hashtag col-2">해시태그</th>
+                <th class="user-id col">작성자</th>
+                <th class="created-at col">작성일</th>
             </tr>
         </thead>
         <tbody>
-            <tr th:each="article : ${articles}">
-                <td th:text="${article.title}"></td>
-                <td th:text="${article.hashtag}"></td>
-                <td th:text="${article.nickname}"></td>
-                <td th:text="${article.createdDate}"></td>
+            <tr>
+                <td class="title"><a>첫글</a></td>
+                <td class="hashtag"><span class="badge text-bg-secondary mx-1"><a class="text-reset">#java</a></span></td>
+                <td class="user-id">Wook</td>
+                <td class="created-at"><time>2022-01-01</time></td>
             </tr>
+            <tr>
+                <td>두번째글</td>
+                <td>#spring</td>
+                <td>Wook</td>
+                <td><time>2022-01-02</time></td>
+            </tr>
+            <tr>
+                <td>세번째글</td>
+                <td>#java</td>
+                <td>Wook</td>
+                <td><time>2022-01-03</time></td>
+            </tr>
+<!--            <tr th:each="article : ${articles}">-->
+<!--                <td th:text="${article.title}"></td>-->
+<!--                <td th:text="${article.hashtags()}"></td>-->
+<!--                <td th:text="${article.nickname}"></td>-->
+<!--                <td th:text="${article.createdAt}"></td>-->
+<!--            </tr>-->
         </tbody>
     </table>
 

@@ -23,7 +23,7 @@ spring:
   jpa:
     defer-datasource-initialization: true  # 초기 데이터 입력 설정
     hibernate.ddl-auto: update  # 자동 테이블 생성
-    open-in-view: false # 성능 향상을 위한 설정
+    open-in-view: false # jpa 영속성 컨텍스트와 뷰 템플릿의 생명주기를 동일하게 유지
     show-sql: true  # 쿼리 확인
     properties:
       hibernate:
@@ -42,15 +42,17 @@ spring:
 --- # --- 기준으로 새로운 프로파일 정보 설정
 
 spring:
-  config.activate.on-profile: testdb # testdb 프로파일 활성화
+  config.activate.on-profile: test # testdb 프로파일 활성화
   datasource:
     url: jdbc:h2:mem:board;mode=mysql
-#    driverClassName: org.h2.Driver
+#    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+#    driverClassName: com.mysql.cj.jdbc.Driver
   sql.init.mode: always
-#  test.database.replace: none
+  test.database.replace: none
   thymeleaf3.decoupled-logic: true
 
-#  jpa:
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL8Dialect
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
