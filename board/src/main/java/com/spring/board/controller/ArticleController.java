@@ -45,7 +45,7 @@ public class ArticleController {
     @GetMapping("/{articleId}")
     public String article(@PathVariable Long articleId, ModelMap map) {
         ArticleDto article = articleService.getArticle(articleId);
-        map.addAttribute("articles", ArticleResponse.from(article));
+        map.addAttribute("article", ArticleResponse.from(article));
 //        ArticleCommentResponse.from()
 //        map.addAttribute("article", ArticleCommentResponse.from(article)); // todo : 실제데이터 응답 필요
 //        map.addAttribute("article", ArticleResponse.from(List.of()))
