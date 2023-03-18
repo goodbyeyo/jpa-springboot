@@ -9,13 +9,13 @@ public record ArticleResponse(
         Long id,
         String title,
         String content,
-        Set<String> hashtags,
+        String hashtag,
         LocalDateTime createdAt,
         String email,
         String nickname
 ) {
 
-    public static ArticleResponse of(Long id, String title, String content, Set<String> hashtags, LocalDateTime createdAt, String email, String nickname) {
+    public static ArticleResponse of(Long id, String title, String content, String hashtags, LocalDateTime createdAt, String email, String nickname) {
         return new ArticleResponse(id, title, content, hashtags, createdAt, email, nickname);
     }
 
@@ -29,7 +29,7 @@ public record ArticleResponse(
                 dto.id(),
                 dto.title(),
                 dto.content(),
-                Set.of(dto.hashtag()),
+                dto.hashtag(),
                 dto.createdAt(),
                 dto.userAccountDto().email(),
                 nickname
