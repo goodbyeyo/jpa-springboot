@@ -2,6 +2,7 @@ package com.spring.board.controller;
 
 import com.spring.board.config.SecurityConfig;
 import com.spring.board.domain.constant.SearchType;
+import com.spring.board.dto.ArticleDto;
 import com.spring.board.dto.ArticleWithCommentsDto;
 import com.spring.board.dto.UserAccountDto;
 import com.spring.board.service.ArticleService;
@@ -120,22 +121,72 @@ class ArticleControllerTest {
         then(paginationService).should().getPaginationBarNumbers(pageable.getPageNumber(), Page.empty().getTotalPages());
     }
 
-//    @DisplayName("[view] [GET] 게시글 상세 페이지 - 정상 호출 ")
-//    @Test
-//    public void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
-//        // given
-//        Long articleId = 1L;
-//        given(articleService.getArticle(articleId)).willReturn(createArticleWithCommentDto());
-//
-//        // when & then
-//        mvc.perform(get("/articles/" + articleId))
-//                .andExpect(status().isOk())
-//                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
-//                .andExpect(view().name("articles/detail"))
-//                .andExpect(model().attributeExists("article"))
-//                .andExpect(model().attributeExists("articleComments"));
-//        then(articleService).should().getArticle(articleId);
-//    }
+    @DisplayName("[view] [GET] 게시글 상세 페이지 - 정상 호출 ")
+    @Test
+    public void givenNothing_whenRequestingArticleView_thenReturnsArticleView() throws Exception {
+        // given
+        Long articleId = 1L;
+        given(articleService.getArticle(articleId)).willReturn(createArticleDto());
+
+        // when & then
+        mvc.perform(get("/articles/" + articleId))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/detail"))
+                .andExpect(model().attributeExists("article"))
+                .andExpect(model().attributeExists("articleComments"));
+        then(articleService).should().getArticle(articleId);
+    }
+
+    @DisplayName("[view][GET] 게시글 해시태그 검색 페이지 - 정상 호출")
+    @Test
+    void givenNothing_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
+        // Given
+        List<String> hashtags = List.of("#java", "#spring", "#boot");
+        given(articleService.searchArticlesViaHashtag(eq(null), any(Pageable.class))).willReturn(Page.empty());
+        given(articleService.getHashtags()).willReturn(hashtags);
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(1, 2, 3, 4, 5));
+
+        // When & Then
+        mvc.perform(get("/articles/search-hashtag"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/search-hashtag"))
+                .andExpect(model().attribute("articles", Page.empty()))
+                .andExpect(model().attribute("hashtags", hashtags))
+                .andExpect(model().attributeExists("paginationBarNumbers"))
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG));
+        then(articleService).should().searchArticlesViaHashtag(eq(null), any(Pageable.class));
+        then(articleService).should().getHashtags();
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+    }
+
+    @DisplayName("[view][GET] 게시글 해시태그 검색 페이지 - 정상 호출, 해시태그 입력")
+    @Test
+    void givenHashtag_whenRequestingArticleSearchHashtagView_thenReturnsArticleSearchHashtagView() throws Exception {
+        // Given
+        String hashtag = "#java";
+        List<String> hashtags = List.of("#java", "#spring", "#boot");
+        given(articleService.searchArticlesViaHashtag(eq(hashtag), any(Pageable.class))).willReturn(Page.empty());
+        given(articleService.getHashtags()).willReturn(hashtags);
+        given(paginationService.getPaginationBarNumbers(anyInt(), anyInt())).willReturn(List.of(1, 2, 3, 4, 5));
+
+        // When & Then
+        mvc.perform(
+                        get("/articles/search-hashtag")
+                                .queryParam("searchValue", hashtag)
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
+                .andExpect(view().name("articles/search-hashtag"))
+                .andExpect(model().attribute("articles", Page.empty()))
+                .andExpect(model().attribute("hashtags", hashtags))
+                .andExpect(model().attributeExists("paginationBarNumbers"))
+                .andExpect(model().attribute("searchType", SearchType.HASHTAG));
+        then(articleService).should().searchArticlesViaHashtag(eq(hashtag), any(Pageable.class));
+        then(articleService).should().getHashtags();
+        then(paginationService).should().getPaginationBarNumbers(anyInt(), anyInt());
+    }
 
     @Disabled("구현 중")
     @DisplayName("[view] [GET] 게시글 검색 전용 페이지 - 정상 호출 ")
@@ -149,6 +200,7 @@ class ArticleControllerTest {
                 .andExpect(view().name("articles/search"))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
     }
+
 
     @Disabled("구현 중")
     @DisplayName("[view] [GET] 게시글 해시태그 검색 페이지 - 정상 호출 ")
@@ -175,6 +227,20 @@ class ArticleControllerTest {
                 LocalDateTime.now(),
                 "woo",
                 Set.of()
+        );
+    }
+
+    private ArticleDto createArticleDto() {
+        return ArticleDto.of(
+                1L,
+                createUserAccountDto(),
+                "title",
+                "content",
+                "#java",
+                LocalDateTime.now(),
+                "woo",
+                LocalDateTime.now(),
+                "woo"
         );
     }
 
