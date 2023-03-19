@@ -11,7 +11,7 @@
                   th:value="${searchType.name}"
                   th:text="${searchType.description}"
                   th:selected="${param.searchType != null && (param.searchType.toString == searchType.name)}"
-            />
+            />  <!-- param 은 url parameter 의미함 toString 으로 접근: 서버에서 받은 searchType 과 비교해서 유지-> -->
         </attr>
         <attr sel="#search-value" th:value="${param.searchValue}" />
         <attr sel="#article-table">
@@ -22,7 +22,7 @@
             )}"/>
                 <attr sel="th.hashtag/a" th:text="'해시태그'" th:href="@{/articles(
                 page=${articles.number},
-                sort='hashtags' + (*{sort.getOrderFor('hashtags')} != null ? (*{sort.getOrderFor('hashtags').direction.name} != 'DESC' ? ',desc' : '') : '')
+                sort='hashtag' + (*{sort.getOrderFor('hashtag')} != null ? (*{sort.getOrderFor('hashtag').direction.name} != 'DESC' ? ',desc' : '') : '')
             )}"/>
                 <attr sel="th.user-id/a" th:text="'작성자'" th:href="@{/articles(
                 page=${articles.number},
@@ -37,12 +37,13 @@
             <attr sel="tbody" th:remove="all-but-first">
                 <attr sel="tr[0]" th:each="article : ${articles}">
                     <attr sel="td.title/a" th:text="${article.title}" th:href="@{'/articles/' + ${article.id}}" />
-                    <attr sel="td.hashtag/span" th:each="hashtag : ${article.hashtags}">
+                    <attr sel="td.hashtag/a" th:text="${article.hashtag}" th:href="@{'/articles/' + ${article.id}}" />
+                    <!--<attr sel="td.hashtag/span" th:each="hashtag : ${article.hashtags}">
                         <attr sel="a"
                               th:text="'#' + ${hashtag}"
                               th:href="@{/articles(searchType=${searchTypeHashtag},searchValue=${hashtag})}"
                         />
-                    </attr>
+                    </attr>-->
                     <attr sel="td.user-id" th:text="${article.nickname}" />
                     <attr sel="td.created-at/time" th:datetime="${article.createdAt}" th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd')}" />
                 </attr>
@@ -52,19 +53,19 @@
         <attr sel="#pagination">
             <attr sel="li[0]/a"
                   th:text="'previous'"
-                  th:href="@{/articles(page=${articles.number - 1})}"
+                  th:href="@{/articles(page=${articles.number - 1}, searchType=${param.searchType}, searchValue=${param.searchValue})}"
                   th:class="'page-link' + (${articles.number} <= 0 ? ' disabled' : '')"
             />
             <attr sel="li[1]" th:class="page-item" th:each="pageNumber : ${paginationBarNumbers}">
                 <attr sel="a"
                       th:text="${pageNumber + 1}"
-                      th:href="@{/articles(page=${pageNumber})}"
+                      th:href="@{/articles(page=${pageNumber}, searchType=${param.searchType}, searchValue=${param.searchValue})}"
                       th:class="'page-link' + (${pageNumber} == ${articles.number} ? ' disabled' : '')"
                 />
             </attr>
             <attr sel="li[2]/a"
                   th:text="'next'"
-                  th:href="@{/articles(page=${articles.number + 1})}"
+                  th:href="@{/articles(page=${articles.number + 1}, searchType=${param.searchType}, searchValue=${param.searchValue})}"
                   th:class="'page-link' + (${articles.number} >= ${articles.totalPages - 1} ? ' disabled' : '')"
             />
         </attr>
