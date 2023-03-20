@@ -35,7 +35,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@DisplayName("View Controller Test")
+@DisplayName("View Controller Test - Article")
 @Import({SecurityConfig.class, FormDataEncoder.class})
 @WebMvcTest(ArticleController.class)
 class ArticleControllerTest {
@@ -362,11 +362,11 @@ class ArticleControllerTest {
                 "password",
                 "woo@gmai.com",
                 "woo",
-                "memo",
+                "memo"/*,
                 LocalDateTime.now(),
                 "woo",
                 LocalDateTime.now(),
-                "woo"
+                "woo"*/
         );
     }
 }

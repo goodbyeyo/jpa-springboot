@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -62,7 +63,8 @@ public record ArticleWithCommentsResponse(
                 nickname,
                 dto.articleCommentDtos().stream()
                         .map(ArticleCommentResponse::from)
-                        .collect(Collectors.toSet()));
+                        .collect(Collectors.toCollection(LinkedHashSet::new))
+        );
     }
 
 }
