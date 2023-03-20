@@ -47,22 +47,22 @@ public record ArticleWithCommentsResponse(
         );
     }
 
-//    public static ArticleWithCommentsResponse from(ArticleWithCommentsDto dto) {
-//        String nickname = dto.userAccountDto().nickname();
-//        if (!StringUtils.hasText(nickname)) {
-//            nickname = dto.userAccountDto().userId();
-//        }
-//        return new ArticleWithCommentsResponse(
-//                dto.id(),
-//                dto.title(),
-//                dto.content(),
-//                dto.hashtag(),
-//                dto.createdAt(),
-//                dto.userAccountDto().email(),
-//                nickname,
-//                dto.articleCommentDtos().stream()
-//                        .map(ArticleCommentResponse::from)
-//                        .collect(Collectors.toSet()));
-//    }
+    public static ArticleWithCommentsResponse from(ArticleWithCommentsDto dto) {
+        String nickname = dto.userAccountDto().nickname();
+        if (!StringUtils.hasText(nickname)) {
+            nickname = dto.userAccountDto().userId();
+        }
+        return new ArticleWithCommentsResponse(
+                dto.id(),
+                dto.title(),
+                dto.content(),
+                dto.hashtag(),
+                dto.createdAt(),
+                dto.userAccountDto().email(),
+                nickname,
+                dto.articleCommentDtos().stream()
+                        .map(ArticleCommentResponse::from)
+                        .collect(Collectors.toSet()));
+    }
 
 }

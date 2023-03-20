@@ -1,6 +1,7 @@
 package com.spring.board.dto;
 
 import com.spring.board.domain.Article;
+import com.spring.board.domain.UserAccount;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +16,10 @@ public record ArticleDto(
         LocalDateTime modifiedAt,
         String modifiedBy
 ) {
+
+    public static ArticleDto of(UserAccountDto userAccountDto, String title, String content, String hashtag) {
+        return new ArticleDto(null, userAccountDto, title, content, hashtag, null, null, null, null);
+    }
     public static ArticleDto of(Long id,
                                 UserAccountDto userAccountDto,
                                 String title,
@@ -41,9 +46,9 @@ public record ArticleDto(
         );
     }
 
-    public Article toEntity() { // Article 은 Dto 의 존재를 몰라도 된다 (순환 참조 방지)
+    public Article toEntity(UserAccount userAccount) { // Article 은 Dto 의 존재를 몰라도 된다 (순환 참조 방지)
         return Article.of(
-                userAccountDto.toEntity(),
+                userAccount, // userAccountDto.toEntity(),
                 title,
                 content,
                 hashtag
