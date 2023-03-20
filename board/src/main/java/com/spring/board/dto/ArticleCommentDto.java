@@ -20,6 +20,7 @@ public record ArticleCommentDto(
         String modifiedBy
 ) {
 
+    // 영속화 되지 않은 ArticleCommentDto 생성할 때 사용하는 팩토리 메서드
     public static ArticleCommentDto of(Long articleId, UserAccountDto userAccountDto, String content) {
         return ArticleCommentDto.of(null, articleId, userAccountDto, content, null, null, null, null);
     }
