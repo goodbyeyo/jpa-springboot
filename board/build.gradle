@@ -39,7 +39,7 @@ dependencies {
     // user custom properties 설정 및 IDEA 지원 활성화 가능
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-//    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.springframework.security:spring-security-test'
 
     // queryDSL 설정
     // implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'

@@ -2,12 +2,14 @@ package com.spring.board.service;
 
 import com.spring.board.domain.Article;
 import com.spring.board.domain.ArticleComment;
+import com.spring.board.domain.UserAccount;
 import com.spring.board.domain.constant.SearchType;
 import com.spring.board.dto.ArticleCommentDto;
 import com.spring.board.dto.ArticleDto;
 import com.spring.board.dto.ArticleWithCommentsDto;
 import com.spring.board.dto.response.ArticleCommentResponse;
 import com.spring.board.repository.ArticleRepository;
+import com.spring.board.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,7 @@ import java.util.List;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final UserAccountRepository userAccountRepository;
 
     @Transactional(readOnly = true)
     public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
@@ -60,14 +63,15 @@ public class ArticleService {
     }
 
     public void saveArticle(ArticleDto dto) {
-        articleRepository.save(dto.toEntity());
+        UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+        articleRepository.save(dto.toEntity(userAccount));
     }
 
     // 클래스 레벨 트랜잭션 설정으로 인해, 메서드 레벨 트랜잭션 설정은 필요 없음
     // 메서드가 종료될때 영속성컨텍스트는 변경을 감지하고 자동으로 flush 됨
-    public void updateArticle(ArticleDto dto) {
+    public void updateArticle(Long articleId, ArticleDto dto) {
         try {
-            var article = articleRepository.getReferenceById(dto.id());
+            var article = articleRepository.getReferenceById(articleId);
             if (StringUtils.hasText(dto.title())) article.updateTitle(dto.title());
             if (StringUtils.hasText(dto.content())) article.updateContent(dto.content());
             if (StringUtils.hasText(dto.hashtag())) article.updateHashTag(dto.hashtag());
