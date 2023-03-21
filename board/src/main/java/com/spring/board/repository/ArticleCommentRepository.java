@@ -28,4 +28,5 @@ public interface ArticleCommentRepository extends
     }
 
     List<ArticleComment> findByArticle_Id(Long articleId);  // article 테이블의 id로 댓글 검색
+    void deleteByIdAndUserAccount_UserId(Long commentId, String userId); // 댓글 삭제
 }

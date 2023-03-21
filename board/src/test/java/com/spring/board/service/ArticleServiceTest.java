@@ -127,7 +127,7 @@ class ArticleServiceTest {
 
     }
 
-    @DisplayName("게시글이 없으 예외를 던진다")
+    @DisplayName("게시글이 없으면 예외를 던진다")
     @Test
     void givenNonExistArticleId_whenSearchingArticle_thenThrowsException() {
         // given
@@ -169,6 +169,7 @@ class ArticleServiceTest {
         // getReferenceById 메서드가 호출되면 article 객체를 반환 (update 메서드가 호출되면 article 객체가 수정된다)
         // getOne -> deprecated
         given(articleRepository.getReferenceById(dto.id())).willReturn(article);
+        given(userAccountRepository.getReferenceById(dto.userAccountDto().userId())).willReturn(dto.userAccountDto().toEntity());
 
         // when
         sut.updateArticle(dto.id(), dto);
@@ -179,6 +180,7 @@ class ArticleServiceTest {
                 .hasFieldOrPropertyWithValue("content", dto.content())
                 .hasFieldOrPropertyWithValue("hashtag", dto.hashtag());
         then(articleRepository).should().getReferenceById(dto.id());
+        then(userAccountRepository).should().getReferenceById(dto.userAccountDto().userId());
     }
 
     @DisplayName("없는 게시글의 수정 정보를 입력하면 경고 로그를 찍고 아무것도 하지 않는다")
@@ -200,17 +202,14 @@ class ArticleServiceTest {
     void givenArticleId_whenDeletingArticle_thenDeletesArticle() {
         // given
         Long articleId = 1L;
-        willDoNothing().given(articleRepository).deleteById(articleId);
-//        given(articleRepository.getReferenceById(articleId)).willReturn(createArticle());
-//        willDoNothing().given(articleRepository).flush();
+        String userId = "woo";
+        willDoNothing().given(articleRepository).deleteByIdAndUserAccount_UserId(articleId, userId);
 
         // when
-        sut.deleteArticle(1L);
+        sut.deleteArticle(1L, userId);
 
         // then (save 메서드가 호출되었는지 확인)
-        then(articleRepository).should().deleteById(articleId);
-//        then(articleRepository).should().getReferenceById(articleId);
-//        then(articleRepository).should().flush();
+        then(articleRepository).should().deleteByIdAndUserAccount_UserId(articleId, userId);
     }
 
     @DisplayName("해시태그를 조회하면, 유니크 해시태그 리스트를 반환한다.")
@@ -235,7 +234,7 @@ class ArticleServiceTest {
                 "password",
                 "woo@gmail.com",
                 "woo",
-                null
+                "memo"
         );
     }
 
