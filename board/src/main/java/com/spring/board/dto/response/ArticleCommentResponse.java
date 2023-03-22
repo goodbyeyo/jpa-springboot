@@ -12,59 +12,29 @@ import java.util.Objects;
 
 public record ArticleCommentResponse(
         Long id,
-        Long articleId,
-        UserAccountDto userAccountDto,
         String content,
-        LocalDateTime createdAt,
-        String createdBy,
-        LocalDateTime modifiedAt,
-        String modifiedBy
+        String userId,
+        String email,
+        String nickname,
+        LocalDateTime createdAt
 ) implements Serializable {
 
-    public static ArticleCommentDto of(Long id,
-                                       Long articleId,
-                                       UserAccountDto userAccountDto,
-                                       String content,
-                                       LocalDateTime createdAt,
-                                       String createdBy,
-                                       LocalDateTime modifiedAt,
-                                       String modifiedBy) {
-        return new ArticleCommentDto(id, articleId, userAccountDto, content, createdAt, createdBy, modifiedAt, modifiedBy);
+    public static ArticleCommentResponse of(Long id, String content, String userId, String email, String nickname, LocalDateTime createdAt) {
+        return new ArticleCommentResponse(id, content, userId, email, nickname, createdAt);
     }
 
     public static ArticleCommentResponse from(ArticleCommentDto dto) {
+        String nickname = dto.userAccountDto().nickname();
+        if (!StringUtils.hasText(nickname)) {
+            nickname = dto.userAccountDto().userId();
+        }
         return new ArticleCommentResponse(
                 dto.id(),
-                dto.articleId(),
-                UserAccountDto.from(Objects.requireNonNull(dto.userAccountDto().toEntity())),
                 dto.content(),
-                dto.createdAt(),
-                dto.createdBy(),
-                dto.modifiedAt(),
-                dto.modifiedBy()
-        );
-    }
-
-//    public static ArticleCommentResponse from(ArticleComment entity) {
-//        return new ArticleCommentResponse(
-//                entity.getId(),
-//                entity.getArticle().getId(),
-//                UserAccountDto.from(entity.getUserAccount()),
-//                entity.getContent(),
-//                entity.getCreatedAt(),
-//                entity.getCreatedBy(),
-//                entity.getModifiedAt(),
-//                entity.getModifiedBy()
-//        );
-//    }
-
-
-
-    public ArticleComment toEntity(Article entity) {
-        return ArticleComment.of(
-                entity,
-                userAccountDto.toEntity(),
-                content
+                dto.userAccountDto().userId(),
+                dto.userAccountDto().email(),
+                nickname,
+                dto.createdAt()
         );
     }
 }
